@@ -44,7 +44,11 @@ class Installer:
         data = req.json()
         for reference in data:
             if reference["download_url"] != None:
-                self.project_files[url] = reference["download_url"]
+                file_contents = self.requests.get(reference["download_url"]).text
+                self.project_files[reference["path"]] = file_contents
+                continue
+            if "?ref" in reference["url"]:
+                self.make_api_call(reference["url"].split("?ref")[0])
                 continue
             self.make_api_call(reference["url"])
 
@@ -118,8 +122,14 @@ class InstallerApp(tkinter.Tk):
         self.installer.download_project()
 
     def install_project(self):
-        for i in self.installer.project_files:
-            print(f"-------{i}-------\n\n{self.installer.project_files[i]}\n\n\n")
+        if os.name == "nt":
+            for file, contents in self.installer.project_files.items():
+                with open(rf"{self.installer.install_path}\{file}", "w+") as f:
+                    f.write(contents)
+        else:
+            for file, contents in self.installer.project_files.items():
+                with open(rf"{self.installer.install_path}/{file}", "w") as f:
+                    f.write(contents)
 
     def install_process(self):
         self.confirm_dependancies()
