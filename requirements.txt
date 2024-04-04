@@ -1,0 +1,4 @@
+customtkinter
+requests
+aiohttp
+asyncio
