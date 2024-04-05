@@ -38,19 +38,21 @@ class Installer:
 
     def download_project(self):
         self.make_api_call(self.github_url)
+        #self.project_files = {"main.py": "print('Hello World')", "requirements.txt": "requests", "README.md": "This is a README file", "data": None, "data/data.txt": "This is a data file"}
 
     def make_api_call(self, url):
         req = self.requests.get(url)
         data = req.json()
         for reference in data:
-            if reference["download_url"] != None:
+            if reference["type"] == "file":
                 file_contents = self.requests.get(reference["download_url"]).text
                 self.project_files[reference["path"]] = file_contents
                 continue
-            if "?ref" in reference["url"]:
-                self.make_api_call(reference["url"].split("?ref")[0])
-                continue
-            self.make_api_call(reference["url"])
+            if reference["type"] == "dir":
+                if "?ref" in reference["url"]:
+                    reference["url"] = reference["url"].split("?ref")[0]
+                self.project_files[reference["path"]] = None
+                self.make_api_call(reference["url"])
 
 
 class ConfirmInstallApp(tkinter.Tk):
@@ -62,16 +64,10 @@ class ConfirmInstallApp(tkinter.Tk):
         self.resizable(False, False)
         self.focus()
 
-        self.install_prompt = tkinter.Label(
-            self, text="Enter the path to install the project:"
-        )
+        self.install_prompt = tkinter.Label(self, text="Enter the path to install the project:")
 
-        self.install_button = tkinter.Button(
-            self, text="Install", command=self.install_button_pressed
-        )
-        self.cancel_button = tkinter.Button(
-            self, text="Cancel", command=self.cancel_button_pressed
-        )
+        self.install_button = tkinter.Button(self, text="Install", command=self.install_button_pressed)
+        self.cancel_button = tkinter.Button(self, text="Cancel", command=self.cancel_button_pressed)
         self.install_path_prompt = tkinter.Entry(self, width=50)
 
         self.install_prompt.place(relx=0.5, rely=0.3, anchor="center")
@@ -122,20 +118,35 @@ class InstallerApp(tkinter.Tk):
         self.installer.download_project()
 
     def install_project(self):
+        if not os.path.isdir(self.installer.install_path):
+            os.makedirs(self.installer.install_path)
         if os.name == "nt":
             for file, contents in self.installer.project_files.items():
-                with open(rf"{self.installer.install_path}\{file}", "w+") as f:
+                file = file.replace("/", f"\\")
+                if contents == None:
+                    print(f"Making {self.installer.install_path}\\{file}")
+                    os.makedirs(f"{self.installer.install_path}\\{file}")
+                    continue
+                with open(rf"{self.installer.install_path}\{file}", "w+", encoding="utf-8") as f:
                     f.write(contents)
         else:
             for file, contents in self.installer.project_files.items():
-                with open(rf"{self.installer.install_path}/{file}", "w") as f:
+                if contents == None:
+                    print(f"Making {self.installer.install_path}/{file}")
+                    os.makedirs(f"{self.installer.install_path}/{file}")
+                    continue
+                if (not os.path.exists(f"{self.installer.install_path}/{file.split("/")[:-1]}")) and (file.count("/") > 1):
+                    os.makedirs(f"{self.installer.install_path}/{file.split("/")[:-1]}")
+                with open(rf"{self.installer.install_path}/{file}", "w", encoding="utf-8") as f:
                     f.write(contents)
 
     def install_process(self):
         self.confirm_dependancies()
         self.status.config(text="Downloading project files")
         self.download_project()
+        self.status.config(text="Installing project files")
         self.install_project()
+        self.status.config(text="Installation complete")
 
 
 if __name__ == "__main__":
