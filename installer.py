@@ -15,8 +15,9 @@ class Installer:
         import requests
 
     def get_missing_dependencies(self):
-        with open("requirements.txt") as f:
-            requirements = f.read().splitlines()
+        #with open("requirements.txt") as f:
+        #    requirements = f.read().splitlines()
+        requirements = ["requests", "customtkinter", "sqlite3"]
 
         missing = []
         for requirement in requirements:
@@ -109,7 +110,7 @@ class InstallerApp(tkinter.Tk):
         self.status.config(text="Checking dependencies...")
         missing = self.installer.get_missing_dependencies()
         if missing:
-            self.status.config(text=f"Installing dependencies: {", ".join(missing)}")
+            self.status.config(text=f"Installing dependencies: {', '.join(missing)}")
             self.installer.install_modules(missing)
         else:
             self.status.config(text="No missing dependencies")
@@ -135,9 +136,7 @@ class InstallerApp(tkinter.Tk):
                     print(f"Making {self.installer.install_path}/{file}")
                     os.makedirs(f"{self.installer.install_path}/{file}")
                     continue
-                if (not os.path.exists(f"{self.installer.install_path}/{file.split("/")[:-1]}")) and (file.count("/") > 1):
-                    os.makedirs(f"{self.installer.install_path}/{file.split("/")[:-1]}")
-                with open(rf"{self.installer.install_path}/{file}", "w", encoding="utf-8") as f:
+                with open(rf"{self.installer.install_path}/{file}", "w+", encoding="utf-8") as f:
                     f.write(contents)
 
     def install_process(self):
