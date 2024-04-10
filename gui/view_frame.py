@@ -27,7 +27,7 @@ class ViewFrame(tkinter.Frame):
             button = tkinter.Button(self, text=f"{task[1]}\n\nDue by: {task[3]}", command=lambda record=task: on_click(record), background=colour)
             button.grid(row=row, column=column, sticky="ew")
             column += 1
-            if column > 5:
+            if column >= 4:
                 column = 0
                 row += 1
             self.buttons.append(button)
@@ -49,7 +49,7 @@ class ViewFrame(tkinter.Frame):
             button = tkinter.Button(self, text=f"{task[1]}\n\nDue by: {task[3]}", command=lambda record=task: on_click(record), background="#006400")
             button.grid(row=row, column=column, sticky="ew")
             column += 1
-            if column > 5:
+            if column >= 4:
                 column = 0
                 row += 1
             self.buttons.append(button)
@@ -72,7 +72,7 @@ class ViewFrame(tkinter.Frame):
             button = tkinter.Button(self, text=f"{task[1]}\n\nDue by: {task[3]}", command=lambda record=task: on_click(record), background="#DE3163")
             button.grid(row=row, column=column, sticky="ew")
             column += 1
-            if column > 3:
+            if column >= 4:
                 column = 0
                 row += 1
             self.buttons.append(button)
