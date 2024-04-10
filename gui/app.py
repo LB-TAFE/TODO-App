@@ -11,6 +11,7 @@ class ToDoApp(tkinter.Tk):
         super().__init__()
         self.geometry("800x600")
         self.resizable(False, False)
+        self.title("To Do App")
 
         self.database_handler = DatabaseHandler()
 
