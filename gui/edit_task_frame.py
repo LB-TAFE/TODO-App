@@ -95,10 +95,7 @@ class EditTaskFrame(tkinter.Frame):
 
     def delete(self):
         self.master.database_handler.delete_task(self.selected_task_id)
-        self.place_forget()
-        self.master.view_frame.render_all()
-        self.master.view_frame.place(x=200, y=0, width=600, height=600)
-        self.master.sidebar.button_pressed(self.master.sidebar.show_all_tasks_button)
+        self.master.sidebar.show_all_tasks_pressed()
 
     def validate_date(self, date):
         try:
