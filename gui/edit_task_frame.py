@@ -1,4 +1,5 @@
 import tkinter
+from datetime import datetime
 
 class EditTaskFrame(tkinter.Frame):
     def __init__(self):
@@ -74,6 +75,10 @@ class EditTaskFrame(tkinter.Frame):
         self.due_by_entry.config(state="normal")
 
     def save(self):
+        due_date = self.turn_into_date_string(self.due_by_entry.get())
+        if not self.validate_date(self.turn_into_date_string(self.due_by_entry.get())):
+            self.invalid_date_warning()
+            return
         self.save_button.config(state="disabled")
         self.title_entry.config(state="readonly")
         self.content_entry.config(state="disabled")
@@ -82,7 +87,7 @@ class EditTaskFrame(tkinter.Frame):
         self.edit_button.config(state="normal")
         self.edit_button.config(text="Edit")
 
-        self.master.database_handler.edit_full_task(self.selected_task_id, self.title_entry.get(), self.content_entry.get(1.0, tkinter.END), self.due_by_entry.get())
+        self.master.database_handler.edit_full_task(self.selected_task_id, self.title_entry.get(), self.content_entry.get(1.0, tkinter.END), due_date)
 
     def delete(self):
         self.master.database_handler.delete_task(self.selected_task_id)
@@ -90,3 +95,22 @@ class EditTaskFrame(tkinter.Frame):
         self.master.view_frame.render_all()
         self.master.view_frame.place(x=200, y=0, width=600, height=600)
         self.master.sidebar.button_pressed(self.master.sidebar.show_all_tasks_button)
+
+    def validate_date(self, date):
+        try:
+            datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+            return True
+        except:
+            return False
+        
+    def turn_into_date_string(self, date):
+        split_date = date.split(" ")
+        if len(split_date) == 1 or split_date[1] == "":
+            return f"{date} 00:00:00"
+        
+        return date
+    
+    def invalid_date_warning(self):
+        self.warning_label = tkinter.Label(self, text="Invalid Date", background=self.label_background, foreground="red")
+        self.warning_label.place(x=200, y=200, width=100, height=50)
+        self.warning_label.after(1200, self.warning_label.destroy)

@@ -62,7 +62,7 @@ class DatabaseHandler:
         """
 
         self.cursor.execute(sql)
-        self.cursor.commit()
+        self.connection.commit()
 
     def edit_full_task(self, id, title, content, due_by):
         self.connect()
@@ -79,10 +79,5 @@ class DatabaseHandler:
 
 if __name__ == "__main__":
     handler = DatabaseHandler()
-    print(handler.get_tasks())
-    handler.create_tasks_table()
-    handler.create_task("Title", "Content", "2023-01-01 00:00:00")
-    handler.create_task("Title Two", "Content Two", "2024-01-01 00:00:00")
-    handler.create_task("Title Three", "Content Three", "2024-06-01 00:00:00")
     print(handler.get_tasks())
     

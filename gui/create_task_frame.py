@@ -1,4 +1,6 @@
 import tkinter
+from datetime import datetime
+import time
 
 class CreateTaskFrame(tkinter.Frame):
 
@@ -37,13 +39,36 @@ class CreateTaskFrame(tkinter.Frame):
     def create(self):
         title = self.title_entry.get()
         content = self.content_entry.get(1.0, tkinter.END)
-        due_by = self.due_by_entry.get()
+        due_by = self.turn_into_date_string(self.due_by_entry.get())
+        if not self.validate_date(due_by):
+            self.invalid_date_warning()
+            return
         self.master.database_handler.create_task(title, content, due_by)
 
         self.title_entry.delete(0, tkinter.END)
         self.content_entry.delete(1.0, tkinter.END)
         self.due_by_entry.delete(0, tkinter.END)
         self.master.sidebar.show_all_tasks_pressed()
+
+    def validate_date(self, date):
+        try:
+            datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+            return True
+        except:
+            return False
+        
+    def turn_into_date_string(self, date):
+        split_date = date.split(" ")
+        if len(split_date) == 1 or split_date[1] == "":
+            return f"{date} 00:00:00"
+        
+        return date
+    
+    def invalid_date_warning(self):
+        self.warning_label = tkinter.Label(self, text="Invalid Date", background=self.label_background, foreground="red")
+        self.warning_label.place(x=100, y=200, width=100, height=50)
+        self.warning_label.after(1200, self.warning_label.destroy)
+        
 
 
 
