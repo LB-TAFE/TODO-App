@@ -21,9 +21,9 @@ class EditTaskFrame(tkinter.Frame):
         self.content_entry.place(x=200, y=100, width=300, height=50)
 
         self.due_by_label = tkinter.Label(self, text="Due By", background=self.label_background, border=1, highlightbackground=self.background, highlightcolor=self.background)
-        self.due_by_label.place(x=450, y=50, width=100, height=50)
-        self.due_by_entry = tkinter.Entry(self, background=self.entry_background, readonlybackground=self.entry_background)
-        self.due_by_entry.place(x=450, y=100, width=100, height=50)
+        self.due_by_label.place(x=450, y=50, width=110, height=50)
+        self.due_by_entry = tkinter.Entry(self, background=self.entry_background, readonlybackground=self.entry_background, font=("Arial", 8))
+        self.due_by_entry.place(x=450, y=100, width=110, height=50)
 
         self.edit_button = tkinter.Button(self, command=self.enable_edit, text="Edit", background="#FFA500")
         self.edit_button.place(x=100, y=200, width=100, height=50)
