@@ -28,7 +28,7 @@ class DatabaseHandler:
         self.connect()
         sql = f"""
         INSERT INTO tasks ('title', 'content', 'due_by')
-        VALUES ('{title}', '{content}', '{due_by}')
+        VALUES ('{title.replace("'", "''")}', '{content.replace("'", "''")}', '{due_by.replace("'", "''")}')
         """
 
         self.cursor.execute(sql)
@@ -57,7 +57,7 @@ class DatabaseHandler:
         self.connect()
         sql = f"""
         UPDATE tasks
-        SET '{field}' = '{value}'
+        SET '{field}' = '{value.replace("'", "''")}'
         WHERE id = {id}
         """
 
@@ -68,7 +68,7 @@ class DatabaseHandler:
         self.connect()
         sql = f"""
         UPDATE tasks
-        SET 'title' = '{title}', 'content' = '{content}', 'due_by' = '{due_by}'
+        SET 'title' = '{title.replace("'", "''")}', 'content' = '{content.replace("'", "''")}', 'due_by' = '{due_by.replace("'", "''")}'
         WHERE id = {id}
         """
 
