@@ -64,22 +64,25 @@ class DatabaseHandler:
         self.cursor.execute(sql)
         self.cursor.commit()
 
+    def edit_full_task(self, id, title, content, due_by):
+        self.connect()
+        sql = f"""
+        UPDATE tasks
+        SET 'title' = '{title}', 'content' = '{content}', 'due_by' = '{due_by}'
+        WHERE id = {id}
+        """
+
+        self.cursor.execute(sql)
+        self.connection.commit()
+
 
 
 if __name__ == "__main__":
     handler = DatabaseHandler()
     print(handler.get_tasks())
     handler.create_tasks_table()
-    handler.create_task("Title", "Content", "Due By")
-    handler.create_task("Title Two", "Content Two", "Due By Two")
-    handler.create_task("Title Three", "Content Three", "Due By Three")
-    handler.create_task("Title Four", "Content Four", "Due By Four")
-    handler.create_task("Title Five", "Content Five", "Due By Five")
-    handler.create_task("Title Six", "Content Six", "Due By Six")
-    handler.create_task("Title Seven", "Content Seven", "Due By Seven")
-    handler.create_task("Title Eight", "Content Eight", "Due By Eight")
-    handler.create_task("Title Nine", "Content Nine", "Due By Nine")
-    handler.create_task("Title Ten", "Content Ten", "Due By Ten")
-    handler.create_task("Title Eleven", "Content Eleven", "Due By Eleven")
+    handler.create_task("Title", "Content", "2023-01-01 00:00:00")
+    handler.create_task("Title Two", "Content Two", "2024-01-01 00:00:00")
+    handler.create_task("Title Three", "Content Three", "2024-06-01 00:00:00")
     print(handler.get_tasks())
     

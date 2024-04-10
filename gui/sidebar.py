@@ -36,21 +36,24 @@ class SideBar(tkinter.Frame):
 
     def create_task_pressed(self):
         self.button_pressed(self.create_task_button)
+        self.master.create_task_frame.render()
 
     def show_upcoming_tasks_pressed(self):
-        self.master.view_frame.render("upcoming")
         self.button_pressed(self.show_upcoming_tasks_button)
+        self.master.view_frame.render_upcoming()
 
     def show_overdue_tasks_pressed(self):
-        self.master.view_frame.render("overdue")
         self.button_pressed(self.show_overdue_tasks_button)
+        self.master.view_frame.render_overdue()
 
     def show_all_tasks_pressed(self):
-        self.master.view_frame.render("all")
         self.button_pressed(self.show_all_tasks_button)
+        self.master.view_frame.render_all()
 
     def button_pressed(self, button):
         self.master.edit_task_frame.place_forget()
+        self.master.create_task_frame.place_forget()
+        self.master.view_frame.place_forget()
         if self.selected_button:
             self.selected_button.config(background=self.background)
         self.selected_button = button
