@@ -75,6 +75,10 @@ class EditTaskFrame(tkinter.Frame):
         self.due_by_entry.config(state="normal")
 
     def save(self):
+        title = self.title_entry.get()
+        if title.strip(" ") == "":
+            self.title_warning()
+            return
         due_date = self.turn_into_date_string(self.due_by_entry.get())
         if not self.validate_date(self.turn_into_date_string(self.due_by_entry.get())):
             self.invalid_date_warning()
@@ -87,7 +91,7 @@ class EditTaskFrame(tkinter.Frame):
         self.edit_button.config(state="normal")
         self.edit_button.config(text="Edit")
 
-        self.master.database_handler.edit_full_task(self.selected_task_id, self.title_entry.get(), self.content_entry.get(1.0, tkinter.END), due_date)
+        self.master.database_handler.edit_full_task(self.selected_task_id, title, self.content_entry.get(1.0, tkinter.END), due_date)
 
     def delete(self):
         self.master.database_handler.delete_task(self.selected_task_id)
@@ -112,5 +116,10 @@ class EditTaskFrame(tkinter.Frame):
     
     def invalid_date_warning(self):
         self.warning_label = tkinter.Label(self, text="Invalid Date", background=self.label_background, foreground="red")
+        self.warning_label.place(x=200, y=200, width=100, height=50)
+        self.warning_label.after(1200, self.warning_label.destroy)
+
+    def title_warning(self):
+        self.warning_label = tkinter.Label(self, text="A title is required", background=self.label_background, foreground="red")
         self.warning_label.place(x=200, y=200, width=100, height=50)
         self.warning_label.after(1200, self.warning_label.destroy)

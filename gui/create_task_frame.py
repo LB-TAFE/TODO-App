@@ -40,6 +40,9 @@ class CreateTaskFrame(tkinter.Frame):
         title = self.title_entry.get()
         content = self.content_entry.get(1.0, tkinter.END)
         due_by = self.turn_into_date_string(self.due_by_entry.get())
+        if title.strip(" ") == "":
+            self.title_warning()
+            return
         if not self.validate_date(due_by):
             self.invalid_date_warning()
             return
@@ -66,6 +69,11 @@ class CreateTaskFrame(tkinter.Frame):
     
     def invalid_date_warning(self):
         self.warning_label = tkinter.Label(self, text="Invalid Date", background=self.label_background, foreground="red")
+        self.warning_label.place(x=100, y=200, width=100, height=50)
+        self.warning_label.after(1200, self.warning_label.destroy)
+
+    def title_warning(self):
+        self.warning_label = tkinter.Label(self, text="A title is required", background=self.label_background, foreground="red")
         self.warning_label.place(x=100, y=200, width=100, height=50)
         self.warning_label.after(1200, self.warning_label.destroy)
         
