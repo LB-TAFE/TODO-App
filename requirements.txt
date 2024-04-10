@@ -1,4 +1,2 @@
-customtkinter
 requests
-aiohttp
-asyncio
+tkinter
