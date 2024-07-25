@@ -8,7 +8,7 @@ class SideBar(tkinter.Frame):
         self.pressed_colour = "#727272"
         super().__init__(highlightthickness=1, highlightbackground="#FFFFFF", highlightcolor="#FFFFFF", background=self.background, width=100, height=600)
 
-        self.tasks_label = tkinter.Label(self, text="View", background=self.label_background, foreground="#FFFFFF", width=110, height=2, font=("Arial", 12))
+        self.tasks_label = tkinter.Label(self, text="View", background=self.label_background, foreground="#FFFFFF", width=140, height=2, font=("Arial", 14))
         self.tasks_label.pack()
 
         self.show_upcoming_tasks_button = tkinter.Button(self, text="Upcoming", command=self.show_upcoming_tasks_pressed, width=100, height=2, background=self.background, foreground="#FFFFFF", border=0)
@@ -21,7 +21,7 @@ class SideBar(tkinter.Frame):
         self.show_all_tasks_button.pack()
 
 
-        self.actions_label = tkinter.Label(self, text="Actions", background=self.label_background, foreground="#FFFFFF", width=110, height=2, font=("Arial", 12))
+        self.actions_label = tkinter.Label(self, text="Actions", background=self.label_background, foreground="#FFFFFF", width=140, height=2, font=("Arial", 14))
         self.actions_label.pack()
 
         self.create_task_button = tkinter.Button(self, text="Create Task", command=self.create_task_pressed, width=100, height=2, background=self.background, foreground="#FFFFFF", border=0)
